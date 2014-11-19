@@ -52,7 +52,7 @@
             //item title image (to be implement)
 
             $xml .= '<item>' . "\n";
-            $xml .= '<title>' . html_entity_decode($rss_item['title']) . '</title>' . "\n";
+            $xml .= '<title>' . htmlspecialchars(html_entity_decode($rss_item['title'])) . '</title>' . "\n";
             $xml .= '<link>' . $rss_item['link'] . '</link>' . "\n";
             $xml .= '<description><![CDATA[' . $rss_item['description'] . ']]></description>' . "\n";
             $xml .= '<pubDate>' . $rss_item['pubDate'] . '</pubDate>' . "\n";
