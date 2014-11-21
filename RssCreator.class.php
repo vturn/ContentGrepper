@@ -25,6 +25,7 @@
         $ttl = 360;
 
         $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
+        $xml .= '<?xml-stylesheet type="text/xsl" href="style/preview.xsl"?>' . "\n";
         $xml .= '<rss version="2.0">' . "\n";
 
         // channel required properties

@@ -35,7 +35,7 @@ input, textarea {
 #layout {
     width: 800px;
 }
-form, #one, #two, #three, #four, #one_url, .button, #two_itempattern, #four_iframe { 
+form, #one, #two, #three, #four, #one_url, .button, #two_itempattern, #four_preview { 
     width: inherit;
 }
 #one_preview, #two, #two_preview, #three, #four {
@@ -73,7 +73,7 @@ $(document).ready(function(){
         console.log('preview button clicked');
         url = $('#one_url').val();
         $.get('getlinkcontent.php?a=one&u=' + url , function( data ) {
-            console.log( "Load was performed." );
+            console.log( "Load was performed(1)." );
             $('#one_preview').css('display', 'block');
             $('#two').css('display', 'block');
             $('#preview').html(data);
@@ -87,7 +87,7 @@ $(document).ready(function(){
         url = $('#one_url').val();
         pattern = $('#two_itempattern').val();
         $.get('getlinkcontent.php?a=two&u=' + url + '&p=' + pattern , function( data ) {
-            console.log( "Load was performed." );
+            console.log( "Load was performed(2)." );
             $('#two_preview').css('display', 'block');
             $('#three').css('display', 'block');
             $('#three_feed_url').val(url); 
@@ -102,15 +102,16 @@ $(document).ready(function(){
         submitdata.push({name : 'url', value: url});
         submitdata.push({name : 'local', value : pattern});
 console.log(submitdata);
-        $.post('preview.php', submitdata, function(data){ 
-            console.log( "Load was performed." );
-            $('#three_preview').css('display', 'block');
+        $.post('preview.php', submitdata).done(function(data){ 
+            console.log( "Load was performed(3)." );
+            $('#four_preview').css('display', 'block');
             $('#four').css('display', 'block');
-            var iframe = document.createElement('iframe');
+            /*var iframe = document.createElement('iframe');
             iframe.id = 'preview3';
             iframe.name = 'preview3';
-            iframe.src = 'data:text/xml;charset=utf-8,' + encodeURI(data);
-            $('#four_iframe').html(iframe);
+            iframe.src = data;
+            $('#four_preview').html(iframe);*/
+            $('#preview3').attr('src', data);
         });
     });
 
@@ -176,7 +177,7 @@ padding: 5px;
 
 <div id='four'>
 <h2>Here is how your feed will look like in feed reader. Go to next step to get the link to your feed.</h2>
-<div name="four_iframe" id="four_iframe"></div>
+<div name="four_preview" id="four_preview"><iframe src="" id="preview3" name="preview3"></iframe></div>
 <div class="space"></div>
 <h2>Step 4. Get your RSS feed</h2>
 </div>
