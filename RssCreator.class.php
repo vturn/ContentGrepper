@@ -17,11 +17,12 @@
     }
 
     public function create_feed() {
-
-        $currTimeStr = date("D, j M G:i:s") . ' +0000'; 
+ 
+        date_default_timezone_set('Asia/Hong_Kong');
+        $currTimeStr = date("D, j M G:i:s") . ' +0800'; 
         $currTime = time();
 
-        $generator = 'VTurn RSS Compiler 1.0';
+        $generator = 'WebRSS Compiler 1.1';
         $ttl = 360;
 
         $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
@@ -56,7 +57,7 @@
             $xml .= '<title>' . htmlspecialchars(html_entity_decode($rss_item['title'])) . '</title>' . "\n";
             $xml .= '<link>' . $rss_item['link'] . '</link>' . "\n";
             $xml .= '<description><![CDATA[' . $rss_item['description'] . ']]></description>' . "\n";
-            $xml .= '<pubDate>' . $rss_item['pubDate'] . '</pubDate>' . "\n";
+            $xml .= '<published>' . $rss_item['published'] . '</published>' . "\n";
             $xml .= '<pubStamp>' . $rss_item['pubStamp'] . '</pubStamp>' . "\n";
          //   $xml .= '<category>' . $rss_item['category'] . '</category>' . "\n";
          //   $xml .= '<source>' . $rss_item['source'] . '</source>' . "\n";

@@ -14,6 +14,7 @@ $title = $_POST['three_feed_title'];
 $link = $_POST['three_feed_url'];
 $description = $_POST['three_feed_desc'];
 $local = $_POST['local'];
+$local_content = '';
 
 //Feed settings
 $item_title = $_POST['three_item_title'];
@@ -23,7 +24,7 @@ $item_description = $_POST['three_item_desc'];
 $config = array(
     'global' => '',
     'local' => $local,
-    'local_content' => '',
+    'local_content' => $local_content,
     'item_title' => $item_title,
     'item_url' => $item_url,
     'item_description' => $item_description,

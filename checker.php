@@ -5,9 +5,6 @@ require_once('GrepFeed.class.php');
 
 $currtime = time();
 $period = 4; //hours
-$range = 60 * 60 * $period;
-$range_max = $currtime + $range;
-$range_min = $currtime - $range;
 
 $path = 'feeds';
 
@@ -30,7 +27,9 @@ function locateLastFeed($old_rss, $new_rss){
 foreach ($files as $file){
     if (strstr($file, '.') == '.xml'){
         $filetimestamp = strstr($file, '-', true);
-        if ($filetimestamp < $range_max && $filetimestamp > $range_min){
+        $nowtime = Date('H');
+        $feedtime = Date('H', $filetimestamp);
+        if (($feedtime - $nowtime) % $period == 0){
             $xml = file_get_contents($path . '/' . $file);
             /*$p = xml_parser_create();
             xml_parse_into_struct($p, $xml, $vals, $index);
@@ -55,33 +54,33 @@ foreach ($files as $file){
                 $rss_item['title'] = (string)$entry->title;
                 $rss_item['link'] = (string)$entry->link;
                 $rss_item['description'] = (string)$entry->description;
-                $rss_item['pubDate'] = (string)$entry->pubDate;
+                $rss_item['published'] = (string)$entry->published;
                 $rss_item['pubStamp'] = (int)(string)$entry->pubStamp;
                 $rss_items[] = $rss_item;
             }
-echo '/////////////////////OLD//////////////////' . PHP_EOL;
-            var_dump($rss_items);
+            //var_dump($rss_items);
             $newfeed = new GrepFeed($config);
             $newrss_items = $newfeed->run();
-echo '/////////////////////NEW///////////////////' . PHP_EOL;
-            var_dump($newrss_items);
+            //var_dump($newrss_items);
       
             $pointer = locateLastFeed($rss_items, $newrss_items);
 
-            echo $pointer . PHP_EOL;
-echo '////////////////////////FINAL///////////////' . PHP_EOL;
             $final_rss = array();
             $j = 0;
+            $count = 0;
             for ($i = 0; $i < count($rss_items); $i++){
                 if ($i < $pointer){ 
                     $final_rss[] = $newrss_items[$i];
+                    $count++;
                 } else {
                     $final_rss[] = $rss_items[$j++];
                 }
             }
+ 
+            echo $file . ': ' . $count . ' post(s) updated.' . PHP_EOL;
 
-            var_dump($final_rss);
-            
+
+            //var_dump($final_rss); 
             $rss = new RssCreator($config, $final_rss);
             $content = $rss->create_feed();
             unlink($path . '/' . $filename . '.xml');
@@ -90,6 +89,8 @@ echo '////////////////////////FINAL///////////////' . PHP_EOL;
             fclose($handle);
 
  
+         } else {
+            echo $file . ': standby ...' . PHP_EOL;
          }
     }
 }

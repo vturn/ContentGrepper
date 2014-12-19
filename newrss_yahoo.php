@@ -30,13 +30,13 @@ $config['channel']['settings'] = urlencode(json_encode($config));
 
 $feed = new GrepFeed($config);
 $rss_items = $feed->run();
-
-$path = 'feeds';
+var_dump($rss_items);
+/*$path = 'feeds';
 
 $rss = new RssCreator($config, $rss_items);
 $content = $rss->create_feed();
 $handle = fopen($path . '/' . $filename . '.xml', 'w');
 fwrite($handle, $content);
-fclose($handle);
+fclose($handle);*/
 
 ?>

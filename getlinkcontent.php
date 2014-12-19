@@ -41,12 +41,12 @@ if ($action == 'two'){
 
     foreach ($rss_items as $count => $rss_item){
         /*foreach ($rss_item as $key => $item){
-            if ($keytext == '{%pubDate}'){
+            if ($keytext == '{%published}'){
                 echo '<div class="two_feed_time">Item ' . ($count + 1) . ': ' . $item . '</div>';
                 continue;
             }
         }*/
-        echo '<div class="two_feed_time">Item ' . ($count + 1) . ': ' . $rss_item['pubDate']. '</div>';
+        echo '<div class="two_feed_time">Item ' . ($count + 1) . ': ' . $rss_item['published']. '</div>';
         for($i = 0; $i < sizeof($rss_item['search']); $i++){
             echo '<div class="two_feed_content"><span class="red_bold">' . $rss_item['search'][$i] . '</span> = ' . $rss_item['replace'][$i]. '</div>';
         }

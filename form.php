@@ -112,6 +112,7 @@ console.log(submitdata);
             iframe.src = data;
             $('#four_preview').html(iframe);*/
             $('#preview3').attr('src', data);
+            $('#four_path').html('<a href="' + data + '" target="_blank">' + data + '</a>');
         });
     });
 
@@ -180,9 +181,8 @@ padding: 5px;
 <div name="four_preview" id="four_preview"><iframe src="" id="preview3" name="preview3"></iframe></div>
 <div class="space"></div>
 <h2>Step 4. Get your RSS feed</h2>
+<div id="four_path" name="four_path"></div>
 </div>
-
-
 
 </div>
 </body>

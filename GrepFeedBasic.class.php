@@ -1,34 +1,19 @@
 <?php
+date_default_timezone_set('Asia/Hong_Kong');
 
 class GrepFeedBasic {
  
     var $url = '';
-    var $global = '';
     var $repeat = '';
     var $pointer = 0;
     var $homepage = '';
     var $blocks = array();
-  
     var $rss_items = array();
-    //var $order = array();
-
-    //var $currTimeStr = '';
-    //var $currTime = null;
-
-    //var $config = array();
-
-    //var $contentConfig = '';
 
     function __construct($url, $pattern){
-        //$this->config = $config;
-        $this->url = $url;//$config['channel']['link'];
-        //$this->global = $config['global'];
-        $this->repeat = $pattern;//$config['local'];
-        //override order
-        //$this->order = $config['order'];
-        //if (isset($config['local_content'])){
-        //    $this->contentConfig = $config['local_content'];
-        //}
+        
+        $this->url = $url;
+        $this->repeat = $pattern;
         if (empty($this->url)){
             echo 'url error';
             return;
@@ -46,22 +31,16 @@ class GrepFeedBasic {
         require_once('lib/tools.php');
 
         $this->homepage = replaceAbsoluteURL($homepage, $this->url);
-
-        /*$feedUrl = parse_url($this->url);
-        $domain = $feedUrl['scheme'] . '://' . $feedUrl['host'] . '/';
-        $this->homepage = $this->replaceAbsoluteURL($homepage, $domain);*/
-
-        $this->currTimeStr = date("D, j M G:i:s") . ' +0000';
+        $this->currTimeStr = date("D, j M G:i:s") . ' +0800';
         $this->currTime = time();
-
     }
 
-    private function globalSearch(){
+    protected function globalSearch(){
         $pointer = 0;
         return $pointer;
     }
 
-    private function formLocalSearchBlocks($repeat){
+    protected function formLocalSearchBlocks($repeat){
         $include = explode('{%}', $repeat);
         $blocks = array();
         for ($i = 0; $i < count($include) - 1; $i++){
@@ -87,26 +66,26 @@ class GrepFeedBasic {
         return $blocks;
     }
 
-    private function localSearch(){
+    protected function localSearch(){
         $this->blocks = $this->formLocalSearchBlocks($this->repeat);
     }
 
-    private function grepContent($homepage, $block, $count){
+    protected function grepContent($homepage, $block, $count){
         $s = strpos($homepage, $block->start, $this->pointer);
         if ($s == FALSE){
             $this->pointer = strlen($homepage);
             return false;
         }
-        $e = strpos($homepage, $block->end, $s+strlen($block->start));// + $pointer;
+        $e = strpos($homepage, $block->end, $s+strlen($block->start));
         $this->pointer = $e;
-        return substr($homepage, $s+strlen($block->start) , ($e-$s-strlen($block->start))).PHP_EOL;//($e+strlen($block->end)) - ($s+strlen($block->start))).PHP_EOL;
+        return substr($homepage, $s+strlen($block->start) , ($e-$s-strlen($block->start))) . PHP_EOL;
     }
 
-    private function getFeedContent(){
+    protected function getFeedContent(){
         $count = 0;
         $rss_item = array();
 
-        $rss_item['pubDate'] = $this->currTimeStr;
+        $rss_item['published'] = $this->currTimeStr;
         $rss_item['pubStamp'] = $this->currTime;
 
         foreach ($this->blocks as $block){
@@ -120,14 +99,6 @@ class GrepFeedBasic {
             }
             $count++;
         }
-        /*if (!empty($this->contentConfig)){
-            //2nd level grep content
-            require_once('GrepFullContent.class.php');
-            if (isset($rss_item['link']) && (!empty($rss_item['link']))){
-                $feedContent = new GrepFullContent($rss_item['link'], $this->contentConfig);
-                $rss_item['description'] = html_entity_decode(trim($feedContent->run()));
-            }
-        }*/
 
         $this->rss_items[] = $rss_item;
         if ($this->pointer < strlen($this->homepage)){
@@ -143,5 +114,4 @@ class GrepFeedBasic {
     }
 
 }
-
 ?>
